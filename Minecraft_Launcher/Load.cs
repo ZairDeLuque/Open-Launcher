@@ -1,64 +1,19 @@
-﻿using CmlLib.Core.Auth;
-using DiscordRPC;
-using System.Net;
+﻿using DiscordRPC;
 using System.Runtime.InteropServices;
 
 namespace Minecraft_Launcher
 {
-    public partial class Init : Form
+    public partial class Load : Form
     {
+        private DiscordRpcClient client;
         private Size formSize;
         private int borderSize = 2;
-        public DiscordRpcClient? client;
 
-        private string?  NameSession;
-        private string? NameSession2;
-        private int MODE_CONNECTED;
-
-        public Init(MSession? session, int Mode)
+        public Load()
         {
             InitializeComponent();
-            Padding = new Padding(1);
-            BackColor = Color.FromArgb(43, 48, 53);
-
-            //Check mode to Auth
-            MODE_CONNECTED = Mode;
-
-            if (MODE_CONNECTED == 0)
-            {
-                NameSession2 = session.Username + " (modo local)";
-            }
-            else
-            {
-                NameSession2 = session.Username;
-            }
-
-            ReadSessionInformation(session);
         }
 
-        #region Anims_Buttons
-
-        private void button1_MouseLeave(object sender, EventArgs e)
-        {
-            button4.ForeColor = Color.Gray;
-        }
-
-        private void button1_MouseEnter(object sender, EventArgs e)
-        {
-            button4.ForeColor = Color.White;
-        }
-
-        private void button2_MouseEnter(object sender, EventArgs e)
-        {
-            button3.ForeColor = Color.White;
-        }
-
-        private void button2_MouseLeave(object sender, EventArgs e)
-        {
-            button3.ForeColor = Color.Gray;
-        }
-
-        #endregion
         #region CallDLL = MoveForm
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
         private extern static void ReleaseCapture();
@@ -183,7 +138,6 @@ namespace Minecraft_Launcher
             base.WndProc(ref m);
         }
         #endregion
-
         #region DiscordConnect
 
         private void DiscordRPC()
@@ -194,8 +148,8 @@ namespace Minecraft_Launcher
 
             client.SetPresence(new RichPresence()
             {
-                State = "Conectado como: " + NameSession2,
-                Details = "Esperando en el menu...",
+                State = "",
+                Details = "Cargando...",
                 Assets = new Assets()
                 {
 
@@ -209,35 +163,24 @@ namespace Minecraft_Launcher
         }
 
         #endregion
-
-        private void Init_Load(object sender, EventArgs e)
+        private void Load_Load(object sender, EventArgs e)
         {
             formSize = this.ClientSize;
 
-            label1.Text = "Open Launcher " + Application.ProductVersion + " | build f0211btv";
-            Text = label1.Text;
+            Text = "Open Launcher " + Application.ProductVersion + " | build f0211btv";
+
+            loadObject.Active = true;
+            loadObject.NumberSpoke = 50;
+            loadObject.SpokeThickness = 2;
+            loadObject.InnerCircleRadius = 10;
+            loadObject.OuterCircleRadius = 11;
+            loadObject.RotationSpeed = 50;
+
 
             DiscordRPC();
         }
 
-        private void ReadSessionInformation(MSession? sessionInfo)
-        {
-            //Username
-            NameSession = sessionInfo.Username;
-            usernameID.Text = NameSession;           
-
-            //Face skin
-            var request = WebRequest.Create("https://minotar.net/cube/" + NameSession + "/100.png");
-
-            using (var response = request.GetResponse())
-            using (var stream = response.GetResponseStream())
-            {
-                cubeFaceObject.Image = Bitmap.FromStream(stream);
-            }
-        }
-
-        #region Title Bar Buttoms
-        private void button4_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
             Environment.Exit(0);
         }
@@ -246,7 +189,5 @@ namespace Minecraft_Launcher
         {
             WindowState = FormWindowState.Minimized;
         }
-
-        #endregion
     }
 }

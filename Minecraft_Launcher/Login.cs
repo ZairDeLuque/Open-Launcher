@@ -291,7 +291,7 @@ namespace Minecraft_Launcher
             
             this.Session = session;
 
-            Init i = new Init(this.Session);
+            Init i = new Init(this.Session, 0);
 
             client.Dispose();
 
