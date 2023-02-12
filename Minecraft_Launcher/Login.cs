@@ -266,19 +266,23 @@ namespace Minecraft_Launcher
 
         private void backOffObject_Click(object sender, EventArgs e)
         {
+            //Return location
             txtnameObject.Location = new Point(old_location_txtX, old_location_txtY);
             backOffObject.Location = new Point(old_back_pointX, old_back_pointY);
             ContinueObject.Location = new Point(old_location_contX, old_location_contY);
 
-
+            //Dissapear objects
             txtnameObject.Visible = false;
             backOffObject.Visible = false;
             extra4.Visible = false;
             ContinueObject.Visible = false;
 
-
+            //Appears main objects
             OfflineObject.Visible = true;
             LoginObject.Visible = true;
+
+            //RPC Change
+            client.UpdateState("");
         }
 
         private void ContinueObject_Click(object sender, EventArgs e)
@@ -286,10 +290,16 @@ namespace Minecraft_Launcher
             MSession session = MSession.GetOfflineSession(txtnameObject.Texts);
             
             this.Session = session;
-           
+
             Init i = new Init(this.Session);
-            i.Show();
-            ActiveForm.Close();
+
+            client.Dispose();
+
+            Hide();
+            i.ShowDialog();
+            Close();
+            
+            
 
         }
 
@@ -308,6 +318,7 @@ namespace Minecraft_Launcher
             backOffObject.Location = new Point(2, 318);
             ContinueObject.Location = new Point(278, 318);
 
+            //Visible Objects
             txtnameObject.Visible = true;
             backOffObject.Visible = true;
             extra4.Visible = true;
@@ -315,6 +326,9 @@ namespace Minecraft_Launcher
 
             OfflineObject.Visible = false;
             LoginObject.Visible = false;
+
+            //RPC Change
+            client.UpdateState("Conectando cuenta local...");
         }
 
         #endregion

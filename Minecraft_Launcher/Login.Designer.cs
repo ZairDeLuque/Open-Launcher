@@ -112,6 +112,7 @@
             this.title.Size = new System.Drawing.Size(198, 15);
             this.title.TabIndex = 0;
             this.title.Text = "Open Launcher [VER] | build [BUILD]";
+            this.title.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MoveForm);
             // 
             // panelContent
             // 
