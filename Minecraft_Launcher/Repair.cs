@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 
 namespace Minecraft_Launcher
@@ -156,43 +157,67 @@ namespace Minecraft_Launcher
 
         #endregion
 
+        //Delete files method
+        
+
+        //Delete regs method
+        public static void DeleteRegistryFolder(RegistryHive registryHive, string fullPathKeyToDelete)
+        {
+            using (var baseKey = RegistryKey.OpenBaseKey(registryHive, RegistryView.Registry64))
+            {
+                try
+                {
+                    baseKey.DeleteSubKeyTree(fullPathKeyToDelete);
+                }
+                catch (Win32Exception ex)
+                {
+                    MessageBox.Show("Ha ocurrido un error mientras se ejecutaba el agente de reparacion. Intentar mas tarde.", ActiveForm.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
         private void ContinueObject_Click(object sender, EventArgs e)
+        {
+            Delete().Wait();
+
+            Environment.Exit(0);
+        }
+
+        private async Task Delete()
         {
             //Read registry keys to re-write
             int folders_created = Convert.ToInt32(Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Aurora Studios\Open Launcher\App\Checkings", "Folders", null));
             int session_ready = Convert.ToInt32(Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Aurora Studios\Open Launcher\App\User\Session", "Login?", null));
-            string minecraft_directory = Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Aurora Studios\Open Launcher\App\Config", "Minecraft_Dir", null) as string;
             string registry_created = Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Aurora Studios\Open Launcher\App\Checkings", "RegistryKeys", null) as string;
-            string app_used = Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Aurora Studios\Open Launcher\App\Checkings", "Runned", null) as string;
 
-            //True reads
             if (folders_created != 0)
             {
-                string dir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Aurora Studios\Open Launcher\Config\";
+                string dir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Aurora Studios\";
 
                 if (Directory.Exists(dir))
                 {
-                    Directory.Delete(dir);
+                    Directory.Delete(dir, true);
                 }
             }
-            
+
             if (session_ready != 0)
             {
                 string dir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\.minecraft\";
-                string dir_exc = Directory.GetCurrentDirectory() + @"\Open Launcher.exe.WebView2\";
+                string dir_exc = Environment.ProcessPath + @"\Open Launcher.exe.WebView2\";
 
                 if (Directory.Exists(dir))
                 {
-                    if (File.Exists(dir + "cml_session.json"))
+                    if (File.Exists(dir + "cml_xsession.json"))
                     {
-
+                        File.Delete(dir + "cml_xsession.json");
+                        Directory.Delete(dir_exc, true);
                     }
                 }
+            }
 
-                if (Directory.Exists(dir_exc))
-                {
-                    Directory.Delete(dir_exc);
-                }
+            if (registry_created != null)
+            {
+                DeleteRegistryFolder(RegistryHive.CurrentUser, @"SOFTWARE\Aurora Studios");
             }
         }
     }

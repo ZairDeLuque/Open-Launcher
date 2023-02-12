@@ -242,8 +242,14 @@ namespace Minecraft_Launcher
                         wkey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Aurora Studios\Open Launcher\App\User\Session", true);
                         wkey.SetValue("UUID", base64.Encoder(session.UUID));
                         wkey.SetValue("Username", base64.Encoder(session.Username));
+                        wkey.SetValue("AccessToken", base64.Encoder(session.AccessToken));
                         wkey.SetValue("Login?", "1", RegistryValueKind.DWord);
 
+                        Init i = new Init(session, 1);
+                        Hide();
+                        client.Dispose();
+                        i.ShowDialog();
+                        Close();
                     }
                     else
                     {

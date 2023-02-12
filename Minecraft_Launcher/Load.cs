@@ -1,6 +1,10 @@
 ﻿using DiscordRPC;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
+using CmlLib.Core.Auth;
+using CmlLib.Core.Auth.Microsoft.UI.WinForm;
+using XboxAuthNet.OAuth;
+using ZairDeLuqueContent.Base64EncoderAndDecoder;
 
 namespace Minecraft_Launcher
 {
@@ -10,6 +14,7 @@ namespace Minecraft_Launcher
         private Size formSize;
         private int borderSize = 2;
         RegistryKey wkey;
+        MSession session;
 
         public Load()
         {
@@ -180,34 +185,111 @@ namespace Minecraft_Launcher
 
 
             DiscordRPC();
-            ReadRegistryEntrys();
+            timer1.Start();
         }
 
         #region Load_Activities
 
         private async Task ReadRegistryEntrys()
         {
+            timer1.Stop();
+
             try
             {
                 int folders_created = Convert.ToInt32(Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Aurora Studios\Open Launcher\App\Checkings", "Folders", null));
                 int session_ready = Convert.ToInt32(Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Aurora Studios\Open Launcher\App\User\Session", "Login?", null));
-                string minecraft_directory = Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Aurora Studios\Open Launcher\App\Config", "Minecraft_Dir", null) as string;
-                string registry_created = Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Aurora Studios\Open Launcher\App\Checkings", "RegistryKeys", null) as string;
-                string app_used = Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Aurora Studios\Open Launcher\App\Checkings", "Runned", null) as string;
-
                 
 
+                if (folders_created == 0)
+                {
+                    CreateFolders().Wait();
+                }
+
+                if (session_ready == 0)
+                {
+                    Login l = new Login();
+
+                    client.Dispose();
+
+                    Hide();
+                    l.ShowDialog();
+                    Close();
+                }
+                else
+                {
+                    CheckSession().Wait();
+                }
+
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Lectura de registros incorrecta.", ActiveForm.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Lectura de registros incorrecta. Error: " + ex, ActiveForm.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             
         }
 
+        private async Task CheckSession()
+        {
+            CmlLib.Core.Auth.Microsoft.XboxMinecraftLogin l = new CmlLib.Core.Auth.Microsoft.XboxMinecraftLogin();
+            string token = Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Aurora Studios\Open Launcher\App\User\Session", "AccessToken", null) as string;
+
+            var a = l.RequestSession(base64.Decoder(token));
+
+            if (a.IsSuccess == true)
+            {
+                this.session = a.Session;
+                Init i = new Init(this.session, 1);
+
+                client.Dispose();
+
+                Hide();
+                i.ShowDialog();
+                Close();
+            }
+        }
+        private async Task RegistryKeys()
+        {
+            wkey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Aurora Studios\Open Launcher\App\Checkings", true);
+            wkey.SetValue("Folders", "1", RegistryValueKind.DWord);
+            wkey.SetValue("RegistryKeys", "true");
+            wkey.SetValue("Runned", "true");
+            wkey.Close();
+            wkey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Aurora Studios\Open Launcher\App\User\Session", true);
+            wkey.SetValue("UUID", "");
+            wkey.SetValue("Username", "");
+            wkey.SetValue("AccessToken", "");
+            wkey.SetValue("Login?", "0", RegistryValueKind.DWord);
+            wkey.Close();
+
+            RegistryKeys_mc().Wait();
+        }
+        private async Task RegistryKeys_mc()
+        {
+            string dir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Aurora Studios\Open Launcher\.minecraft\versions\";
+
+            wkey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Aurora Studios\Open Launcher\App\Config", true);
+            wkey.SetValue("Minecraft_Dir", dir);
+
+            wkey.Close();
+            
+        }
         private async Task CreateFolders()
         {
+            string dir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Aurora Studios\Open Launcher\Config\";
+            string dir2 = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Aurora Studios\Open Launcher\User\Profiles\";
+            string dir3 = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Aurora Studios\Open Launcher\Cache\";
+            string dir4 = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Aurora Studios\Open Launcher\Resources\Icons\";
+            string dir5 = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Aurora Studios\Open Launcher\.minecraft\";
+            string dir6 = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Aurora Studios\Open Launcher\.minecraft\versions\";
 
+            Directory.CreateDirectory(dir);
+            Directory.CreateDirectory(dir2);
+            Directory.CreateDirectory(dir3);
+            Directory.CreateDirectory(dir4);
+            Directory.CreateDirectory(dir5);
+            Directory.CreateDirectory(dir6);
+
+            RegistryKeys().Wait();
         }
 
         #endregion
@@ -262,8 +344,23 @@ namespace Minecraft_Launcher
         {
             Repair r = new Repair();
             client.UpdateDetails("Reparando launcher...");
+
+            timer1.Stop();
+            loadObject.Active = false;
+            loadObject.Visible = false;
+
             r.ShowDialog();
+
+            loadObject.Active = true;
+            loadObject.Visible = true;
+            timer1.Start();
+
             client.UpdateDetails("Cargando...");
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            ReadRegistryEntrys().Wait();
         }
     }
 }

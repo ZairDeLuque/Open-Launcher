@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Load));
             this.titleLogo = new System.Windows.Forms.PictureBox();
             this.button1 = new System.Windows.Forms.Button();
@@ -35,6 +36,7 @@
             this.button3 = new System.Windows.Forms.Button();
             this.repairObject = new FontAwesome.Sharp.IconButton();
             this.extra1 = new System.Windows.Forms.Label();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.titleLogo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -134,6 +136,11 @@
             this.extra1.TabIndex = 10;
             this.extra1.Text = "Repair";
             // 
+            // timer1
+            // 
+            this.timer1.Interval = 5000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // Load
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -167,5 +174,6 @@
         private Button button3;
         private FontAwesome.Sharp.IconButton repairObject;
         private Label extra1;
+        private System.Windows.Forms.Timer timer1;
     }
 }
