@@ -1,13 +1,15 @@
 ﻿using DiscordRPC;
 using System.Runtime.InteropServices;
+using Microsoft.Win32;
 
 namespace Minecraft_Launcher
 {
     public partial class Load : Form
     {
-        private DiscordRpcClient client;
+        private DiscordRpcClient? client;
         private Size formSize;
         private int borderSize = 2;
+        RegistryKey wkey;
 
         public Load()
         {
@@ -178,8 +180,39 @@ namespace Minecraft_Launcher
 
 
             DiscordRPC();
+            ReadRegistryEntrys();
         }
 
+        #region Load_Activities
+
+        private async Task ReadRegistryEntrys()
+        {
+            try
+            {
+                int folders_created = Convert.ToInt32(Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Aurora Studios\Open Launcher\App\Checkings", "Folders", null));
+                int session_ready = Convert.ToInt32(Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Aurora Studios\Open Launcher\App\User\Session", "Login?", null));
+                string minecraft_directory = Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Aurora Studios\Open Launcher\App\Config", "Minecraft_Dir", null) as string;
+                string registry_created = Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Aurora Studios\Open Launcher\App\Checkings", "RegistryKeys", null) as string;
+                string app_used = Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Aurora Studios\Open Launcher\App\Checkings", "Runned", null) as string;
+
+                
+
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Lectura de registros incorrecta.", ActiveForm.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            
+        }
+
+        private async Task CreateFolders()
+        {
+
+        }
+
+        #endregion
+
+        #region Title Bar Controls
         private void button1_Click(object sender, EventArgs e)
         {
             Environment.Exit(0);
@@ -188,6 +221,49 @@ namespace Minecraft_Launcher
         private void button3_Click(object sender, EventArgs e)
         {
             WindowState = FormWindowState.Minimized;
+        }
+        #endregion
+
+        #region Anims Btns
+        private void button1_MouseEnter(object sender, EventArgs e)
+        {
+            button1.ForeColor = Color.White;
+        }
+
+        private void button1_MouseLeave(object sender, EventArgs e)
+        {
+            button1.ForeColor = Color.Gray;
+        }
+
+        private void button3_MouseEnter(object sender, EventArgs e)
+        {
+            button3.ForeColor = Color.White;
+        }
+
+        private void button3_MouseLeave(object sender, EventArgs e)
+        {
+            button3.ForeColor = Color.Gray;
+        }
+
+        private void repairObject_MouseEnter(object sender, EventArgs e)
+        {
+            repairObject.IconColor = Color.White;
+            extra1.ForeColor = Color.White;
+        }
+
+        private void repairObject_MouseLeave(object sender, EventArgs e)
+        {
+            repairObject.IconColor = Color.Gray;
+            extra1.ForeColor = Color.Gray;
+        }
+        #endregion
+
+        private void repairObject_Click(object sender, EventArgs e)
+        {
+            Repair r = new Repair();
+            client.UpdateDetails("Reparando launcher...");
+            r.ShowDialog();
+            client.UpdateDetails("Cargando...");
         }
     }
 }

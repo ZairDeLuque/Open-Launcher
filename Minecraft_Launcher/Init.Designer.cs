@@ -33,7 +33,6 @@
             this.panelTitleBar = new System.Windows.Forms.Panel();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.panelRight = new System.Windows.Forms.Panel();
@@ -41,9 +40,11 @@
             this.cubeFaceObject = new System.Windows.Forms.PictureBox();
             this.extra1 = new System.Windows.Forms.Label();
             this.panelContent = new System.Windows.Forms.Panel();
+            this.titleLogo = new System.Windows.Forms.PictureBox();
             this.panelTitleBar.SuspendLayout();
             this.panelRight.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cubeFaceObject)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.titleLogo)).BeginInit();
             this.SuspendLayout();
             // 
             // title
@@ -60,9 +61,9 @@
             // panelTitleBar
             // 
             this.panelTitleBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(48)))), ((int)(((byte)(53)))));
+            this.panelTitleBar.Controls.Add(this.titleLogo);
             this.panelTitleBar.Controls.Add(this.button3);
             this.panelTitleBar.Controls.Add(this.button4);
-            this.panelTitleBar.Controls.Add(this.label1);
             this.panelTitleBar.Controls.Add(this.button2);
             this.panelTitleBar.Controls.Add(this.button1);
             this.panelTitleBar.Controls.Add(this.title);
@@ -108,18 +109,6 @@
             this.button4.Click += new System.EventHandler(this.button4_Click);
             this.button4.MouseEnter += new System.EventHandler(this.button1_MouseEnter);
             this.button4.MouseLeave += new System.EventHandler(this.button1_MouseLeave);
-            // 
-            // label1
-            // 
-            this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.label1.AutoSize = true;
-            this.label1.ForeColor = System.Drawing.Color.Gray;
-            this.label1.Location = new System.Drawing.Point(9, 6);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(198, 15);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Open Launcher [VER] | build [BUILD]";
-            this.label1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MoveForm);
             // 
             // button2
             // 
@@ -202,6 +191,16 @@
             this.panelContent.Size = new System.Drawing.Size(764, 554);
             this.panelContent.TabIndex = 3;
             // 
+            // titleLogo
+            // 
+            this.titleLogo.Image = global::Minecraft_Launcher.Properties.Resources.Screen;
+            this.titleLogo.Location = new System.Drawing.Point(12, 1);
+            this.titleLogo.Name = "titleLogo";
+            this.titleLogo.Size = new System.Drawing.Size(139, 25);
+            this.titleLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.titleLogo.TabIndex = 8;
+            this.titleLogo.TabStop = false;
+            // 
             // Init
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -221,6 +220,7 @@
             this.panelRight.ResumeLayout(false);
             this.panelRight.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cubeFaceObject)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.titleLogo)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -233,11 +233,11 @@
         private Button button1;
         private Button button3;
         private Button button4;
-        private Label label1;
         private Panel panelRight;
         private Panel panelContent;
         private Label usernameID;
         private PictureBox cubeFaceObject;
         private Label extra1;
+        private PictureBox titleLogo;
     }
 }

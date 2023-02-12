@@ -1,64 +1,18 @@
-﻿using CmlLib.Core.Auth;
-using DiscordRPC;
-using System.Net;
+﻿using Microsoft.Win32;
 using System.Runtime.InteropServices;
 
 namespace Minecraft_Launcher
 {
-    public partial class Init : Form
+    public partial class Repair : Form
     {
         private Size formSize;
         private int borderSize = 2;
-        public DiscordRpcClient? client;
 
-        private string?  NameSession;
-        private string? NameSession2;
-        private int MODE_CONNECTED;
-
-        public Init(MSession? session, int Mode)
+        public Repair()
         {
             InitializeComponent();
-            Padding = new Padding(1);
-            BackColor = Color.FromArgb(43, 48, 53);
-
-            //Check mode to Auth
-            MODE_CONNECTED = Mode;
-
-            if (MODE_CONNECTED == 0)
-            {
-                NameSession2 = session.Username + " (modo local)";
-            }
-            else
-            {
-                NameSession2 = session.Username;
-            }
-
-            ReadSessionInformation(session);
         }
 
-        #region Anims_Buttons
-
-        private void button1_MouseLeave(object sender, EventArgs e)
-        {
-            button4.ForeColor = Color.Gray;
-        }
-
-        private void button1_MouseEnter(object sender, EventArgs e)
-        {
-            button4.ForeColor = Color.White;
-        }
-
-        private void button2_MouseEnter(object sender, EventArgs e)
-        {
-            button3.ForeColor = Color.White;
-        }
-
-        private void button2_MouseLeave(object sender, EventArgs e)
-        {
-            button3.ForeColor = Color.Gray;
-        }
-
-        #endregion
         #region CallDLL = MoveForm
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
         private extern static void ReleaseCapture();
@@ -184,68 +138,62 @@ namespace Minecraft_Launcher
         }
         #endregion
 
-        #region DiscordConnect
-
-        private void DiscordRPC()
+        #region Anims & Actions btn
+        private void button1_MouseEnter(object sender, EventArgs e)
         {
-            client = new DiscordRpcClient("1074071966027354214");
+            button1.ForeColor = Color.White;
+        }
 
-            client.Initialize();
+        private void button1_MouseLeave(object sender, EventArgs e)
+        {
+            button1.ForeColor = Color.Gray;
+        }
 
-            client.SetPresence(new RichPresence()
-            {
-                State = "Conectado como: " + NameSession2,
-                Details = "Esperando en el menu...",
-                Assets = new Assets()
-                {
-
-                    LargeImageKey = "icondiscord",
-                    LargeImageText = "Open Launcher",
-                    SmallImageKey = "",
-                    SmallImageText = ""
-
-                }
-            });
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ActiveForm.Close();
         }
 
         #endregion
 
-        private void Init_Load(object sender, EventArgs e)
+        private void ContinueObject_Click(object sender, EventArgs e)
         {
-            formSize = this.ClientSize;
+            //Read registry keys to re-write
+            int folders_created = Convert.ToInt32(Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Aurora Studios\Open Launcher\App\Checkings", "Folders", null));
+            int session_ready = Convert.ToInt32(Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Aurora Studios\Open Launcher\App\User\Session", "Login?", null));
+            string minecraft_directory = Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Aurora Studios\Open Launcher\App\Config", "Minecraft_Dir", null) as string;
+            string registry_created = Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Aurora Studios\Open Launcher\App\Checkings", "RegistryKeys", null) as string;
+            string app_used = Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Aurora Studios\Open Launcher\App\Checkings", "Runned", null) as string;
 
-            Text = "Open Launcher " + Application.ProductVersion + " | build f0211btv";
-
-            DiscordRPC();
-        }
-
-        private void ReadSessionInformation(MSession? sessionInfo)
-        {
-            //Username
-            NameSession = sessionInfo.Username;
-            usernameID.Text = NameSession;           
-
-            //Face skin
-            var request = WebRequest.Create("https://minotar.net/cube/" + NameSession + "/100.png");
-
-            using (var response = request.GetResponse())
-            using (var stream = response.GetResponseStream())
+            //True reads
+            if (folders_created != 0)
             {
-                cubeFaceObject.Image = Bitmap.FromStream(stream);
+                string dir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Aurora Studios\Open Launcher\Config\";
+
+                if (Directory.Exists(dir))
+                {
+                    Directory.Delete(dir);
+                }
+            }
+            
+            if (session_ready != 0)
+            {
+                string dir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\.minecraft\";
+                string dir_exc = Directory.GetCurrentDirectory() + @"\Open Launcher.exe.WebView2\";
+
+                if (Directory.Exists(dir))
+                {
+                    if (File.Exists(dir + "cml_session.json"))
+                    {
+
+                    }
+                }
+
+                if (Directory.Exists(dir_exc))
+                {
+                    Directory.Delete(dir_exc);
+                }
             }
         }
-
-        #region Title Bar Buttoms
-        private void button4_Click(object sender, EventArgs e)
-        {
-            Environment.Exit(0);
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            WindowState = FormWindowState.Minimized;
-        }
-
-        #endregion
     }
 }
