@@ -217,6 +217,7 @@
             this.ContinueObject.Text = "Continuar";
             this.ContinueObject.UseVisualStyleBackColor = false;
             this.ContinueObject.Visible = false;
+            this.ContinueObject.Click += new System.EventHandler(this.ContinueObject_Click);
             // 
             // backOffObject
             // 

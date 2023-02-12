@@ -214,7 +214,6 @@ namespace Minecraft_Launcher
         {
             Environment.Exit(0);
         }
-        
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -280,6 +279,18 @@ namespace Minecraft_Launcher
 
             OfflineObject.Visible = true;
             LoginObject.Visible = true;
+        }
+
+        private void ContinueObject_Click(object sender, EventArgs e)
+        {
+            MSession session = MSession.GetOfflineSession(txtnameObject.Texts);
+            
+            this.Session = session;
+           
+            Init i = new Init(this.Session);
+            i.Show();
+            ActiveForm.Close();
+
         }
 
         private void OfflineObject_Click(object sender, EventArgs e)
