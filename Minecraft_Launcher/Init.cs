@@ -1,5 +1,6 @@
 ﻿using CmlLib.Core.Auth;
 using DiscordRPC;
+using Minecraft_Launcher.Components.TabControls;
 using System.Net;
 using System.Runtime.InteropServices;
 
@@ -247,5 +248,19 @@ namespace Minecraft_Launcher
         }
 
         #endregion
+
+        private void addComponentTabControl(UserControl userControl)
+        {
+            userControl.Dock = DockStyle.Fill;
+            panelContent.Controls.Clear();
+            panelContent.Controls.Add(userControl);
+            userControl.BringToFront();
+        }
+
+        private void addinstanceObject_Click(object sender, EventArgs e)
+        {
+            TC_AddInstances add = new TC_AddInstances();
+            addComponentTabControl(add);
+        }
     }
 }

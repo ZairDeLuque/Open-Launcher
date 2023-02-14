@@ -2,8 +2,6 @@
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using CmlLib.Core.Auth;
-using CmlLib.Core.Auth.Microsoft.UI.WinForm;
-using XboxAuthNet.OAuth;
 using ZairDeLuqueContent.Base64EncoderAndDecoder;
 
 namespace Minecraft_Launcher
@@ -227,6 +225,7 @@ namespace Minecraft_Launcher
             }
             
         }
+
 
         private async Task CheckSession()
         {

@@ -156,8 +156,6 @@ namespace Minecraft_Launcher
         }
 
         #endregion
-
-        //Delete files method
         
 
         //Delete regs method
@@ -203,7 +201,7 @@ namespace Minecraft_Launcher
             if (session_ready != 0)
             {
                 string dir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\.minecraft\";
-                string dir_exc = Environment.ProcessPath + @"\Open Launcher.exe.WebView2\";
+                string dir_exc = Environment.ProcessPath + @"\Open Launcher.exe.WebView2";
 
                 if (Directory.Exists(dir))
                 {

@@ -31,20 +31,23 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Init));
             this.title = new System.Windows.Forms.Label();
             this.panelTitleBar = new System.Windows.Forms.Panel();
+            this.titleLogo = new System.Windows.Forms.PictureBox();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.panelRight = new System.Windows.Forms.Panel();
+            this.addinstanceObject = new FontAwesome.Sharp.IconButton();
+            this.settingsObject = new FontAwesome.Sharp.IconButton();
+            this.changeuObject = new FontAwesome.Sharp.IconButton();
             this.usernameID = new System.Windows.Forms.Label();
             this.cubeFaceObject = new System.Windows.Forms.PictureBox();
             this.extra1 = new System.Windows.Forms.Label();
             this.panelContent = new System.Windows.Forms.Panel();
-            this.titleLogo = new System.Windows.Forms.PictureBox();
             this.panelTitleBar.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.titleLogo)).BeginInit();
             this.panelRight.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cubeFaceObject)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.titleLogo)).BeginInit();
             this.SuspendLayout();
             // 
             // title
@@ -73,6 +76,17 @@
             this.panelTitleBar.Size = new System.Drawing.Size(1008, 27);
             this.panelTitleBar.TabIndex = 1;
             this.panelTitleBar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MoveForm);
+            // 
+            // titleLogo
+            // 
+            this.titleLogo.Image = global::Minecraft_Launcher.Properties.Resources.Screen;
+            this.titleLogo.Location = new System.Drawing.Point(1, 1);
+            this.titleLogo.Name = "titleLogo";
+            this.titleLogo.Size = new System.Drawing.Size(139, 25);
+            this.titleLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.titleLogo.TabIndex = 8;
+            this.titleLogo.TabStop = false;
+            this.titleLogo.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MoveForm);
             // 
             // button3
             // 
@@ -143,6 +157,9 @@
             // panelRight
             // 
             this.panelRight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(48)))), ((int)(((byte)(53)))));
+            this.panelRight.Controls.Add(this.addinstanceObject);
+            this.panelRight.Controls.Add(this.settingsObject);
+            this.panelRight.Controls.Add(this.changeuObject);
             this.panelRight.Controls.Add(this.usernameID);
             this.panelRight.Controls.Add(this.cubeFaceObject);
             this.panelRight.Controls.Add(this.extra1);
@@ -151,6 +168,64 @@
             this.panelRight.Name = "panelRight";
             this.panelRight.Size = new System.Drawing.Size(244, 554);
             this.panelRight.TabIndex = 2;
+            // 
+            // addinstanceObject
+            // 
+            this.addinstanceObject.FlatAppearance.BorderSize = 0;
+            this.addinstanceObject.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(37)))), ((int)(((byte)(41)))));
+            this.addinstanceObject.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(37)))), ((int)(((byte)(41)))));
+            this.addinstanceObject.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.addinstanceObject.ForeColor = System.Drawing.Color.White;
+            this.addinstanceObject.IconChar = FontAwesome.Sharp.IconChar.Plus;
+            this.addinstanceObject.IconColor = System.Drawing.Color.White;
+            this.addinstanceObject.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.addinstanceObject.IconSize = 24;
+            this.addinstanceObject.Location = new System.Drawing.Point(-1, 157);
+            this.addinstanceObject.Name = "addinstanceObject";
+            this.addinstanceObject.Size = new System.Drawing.Size(244, 33);
+            this.addinstanceObject.TabIndex = 5;
+            this.addinstanceObject.Text = "               Añadir instancia";
+            this.addinstanceObject.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.addinstanceObject.UseVisualStyleBackColor = true;
+            this.addinstanceObject.Click += new System.EventHandler(this.addinstanceObject_Click);
+            // 
+            // settingsObject
+            // 
+            this.settingsObject.FlatAppearance.BorderSize = 0;
+            this.settingsObject.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(37)))), ((int)(((byte)(41)))));
+            this.settingsObject.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(37)))), ((int)(((byte)(41)))));
+            this.settingsObject.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.settingsObject.ForeColor = System.Drawing.Color.White;
+            this.settingsObject.IconChar = FontAwesome.Sharp.IconChar.Hammer;
+            this.settingsObject.IconColor = System.Drawing.Color.White;
+            this.settingsObject.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.settingsObject.IconSize = 24;
+            this.settingsObject.Location = new System.Drawing.Point(-1, 118);
+            this.settingsObject.Name = "settingsObject";
+            this.settingsObject.Size = new System.Drawing.Size(244, 33);
+            this.settingsObject.TabIndex = 4;
+            this.settingsObject.Text = "           Ajustes del launcher";
+            this.settingsObject.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.settingsObject.UseVisualStyleBackColor = true;
+            // 
+            // changeuObject
+            // 
+            this.changeuObject.FlatAppearance.BorderSize = 0;
+            this.changeuObject.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(37)))), ((int)(((byte)(41)))));
+            this.changeuObject.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(37)))), ((int)(((byte)(41)))));
+            this.changeuObject.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.changeuObject.ForeColor = System.Drawing.Color.White;
+            this.changeuObject.IconChar = FontAwesome.Sharp.IconChar.User;
+            this.changeuObject.IconColor = System.Drawing.Color.White;
+            this.changeuObject.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.changeuObject.IconSize = 24;
+            this.changeuObject.Location = new System.Drawing.Point(0, 79);
+            this.changeuObject.Name = "changeuObject";
+            this.changeuObject.Size = new System.Drawing.Size(244, 33);
+            this.changeuObject.TabIndex = 3;
+            this.changeuObject.Text = "            Gestión de usuarios";
+            this.changeuObject.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.changeuObject.UseVisualStyleBackColor = true;
             // 
             // usernameID
             // 
@@ -191,16 +266,6 @@
             this.panelContent.Size = new System.Drawing.Size(764, 554);
             this.panelContent.TabIndex = 3;
             // 
-            // titleLogo
-            // 
-            this.titleLogo.Image = global::Minecraft_Launcher.Properties.Resources.Screen;
-            this.titleLogo.Location = new System.Drawing.Point(12, 1);
-            this.titleLogo.Name = "titleLogo";
-            this.titleLogo.Size = new System.Drawing.Size(139, 25);
-            this.titleLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.titleLogo.TabIndex = 8;
-            this.titleLogo.TabStop = false;
-            // 
             // Init
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -217,10 +282,10 @@
             this.Load += new System.EventHandler(this.Init_Load);
             this.panelTitleBar.ResumeLayout(false);
             this.panelTitleBar.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.titleLogo)).EndInit();
             this.panelRight.ResumeLayout(false);
             this.panelRight.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cubeFaceObject)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.titleLogo)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -239,5 +304,8 @@
         private PictureBox cubeFaceObject;
         private Label extra1;
         private PictureBox titleLogo;
+        private FontAwesome.Sharp.IconButton changeuObject;
+        private FontAwesome.Sharp.IconButton addinstanceObject;
+        private FontAwesome.Sharp.IconButton settingsObject;
     }
 }
