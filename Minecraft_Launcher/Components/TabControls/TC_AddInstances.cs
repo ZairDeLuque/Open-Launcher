@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Minecraft_Launcher.Components.TabControls.Instances_subTC.IconsComponent;
 
 namespace Minecraft_Launcher.Components.TabControls
 {
@@ -53,6 +54,16 @@ namespace Minecraft_Launcher.Components.TabControls
         private void TC_AddInstances_Load(object sender, EventArgs e)
         {
             zdlTextBox2.Texts = Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Aurora Studios\Open Launcher\App\Config", "Minecraft_Dir", null) as string;
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            DialogResult r = Icons_Read_Component.Show();
+
+            if (r == DialogResult.OK)
+            {
+                MessageBox.Show("Listo");
+            }
         }
     }
 }

@@ -1,17 +1,72 @@
-﻿using Microsoft.Win32;
-using System.ComponentModel;
+﻿using Minecraft_Launcher.Components.TabControls.Instances_subTC.imageListCreate;
 using System.Runtime.InteropServices;
 
-namespace Minecraft_Launcher
+namespace Minecraft_Launcher.Components.TabControls.Instances_subTC
 {
-    public partial class Repair : Form
+    public partial class Icons_Read : Form
     {
+        private int c = 1, max;
         private Size formSize;
         private int borderSize = 2;
 
-        public Repair()
+        public Icons_Read()
         {
             InitializeComponent();
+
+            Padding = new Padding(1);
+            BackColor = Color.FromArgb(43, 48, 53);
+
+            AddImagesToRes().Wait();
+
+            label3.ImageIndex = c;
+        }
+
+        private void iconButton2_Click(object sender, EventArgs e)
+        {
+            c--;
+
+            if (c < 1)
+            {
+                c = max;
+            }
+
+            label3.ImageIndex = c;
+        }
+
+        private void ContinueObject_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private async Task AddImagesToRes()
+        {
+            string path = Application.StartupPath + @"\Icons\";
+
+            foreach (string f in Directory.GetFiles(path))
+            {
+                try
+                {
+                    Image img = Image.FromFile(f);
+                    imageList1.Images.Add(img);
+                    max++;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex);
+                }
+            }
+        }
+
+        private void iconButton1_Click(object sender, EventArgs e)
+        {
+            c++;
+
+            if (c > max)
+            {
+                c = 1;
+            }
+
+            label3.ImageIndex = c;
         }
 
         #region CallDLL = MoveForm
@@ -138,85 +193,5 @@ namespace Minecraft_Launcher
             base.WndProc(ref m);
         }
         #endregion
-
-        #region Anims & Actions btn
-        private void button1_MouseEnter(object sender, EventArgs e)
-        {
-            button1.ForeColor = Color.White;
-        }
-
-        private void button1_MouseLeave(object sender, EventArgs e)
-        {
-            button1.ForeColor = Color.Gray;
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            ActiveForm.Close();
-        }
-
-        #endregion
-        
-
-        //Delete regs method
-        public static void DeleteRegistryFolder(RegistryHive registryHive, string fullPathKeyToDelete)
-        {
-            using (var baseKey = RegistryKey.OpenBaseKey(registryHive, RegistryView.Registry64))
-            {
-                try
-                {
-                    baseKey.DeleteSubKeyTree(fullPathKeyToDelete);
-                }
-                catch (Win32Exception ex)
-                {
-                    MessageBox.Show("Ha ocurrido un error mientras se ejecutaba el agente de reparacion. Intentar mas tarde.", ActiveForm.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
-
-        private void ContinueObject_Click(object sender, EventArgs e)
-        {
-            Delete().Wait();
-
-            Environment.Exit(0);
-        }
-
-        private async Task Delete()
-        {
-            //Read registry keys to re-write
-            int folders_created = Convert.ToInt32(Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Aurora Studios\Open Launcher\App\Checkings", "Folders", null));
-            int session_ready = Convert.ToInt32(Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Aurora Studios\Open Launcher\App\User\Session", "Login?", null));
-            string registry_created = Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Aurora Studios\Open Launcher\App\Checkings", "RegistryKeys", null) as string;
-
-            if (folders_created != 0)
-            {
-                string dir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Aurora Studios\";
-
-                if (Directory.Exists(dir))
-                {
-                    Directory.Delete(dir, true);
-                }
-            }
-
-            if (session_ready != 0)
-            {
-                string dir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\.minecraft\";
-                string dir_exc = Application.StartupPath + @"\Open Launcher.exe.WebView2";
-
-                if (Directory.Exists(dir))
-                {
-                    if (File.Exists(dir + "cml_xsession.json"))
-                    {
-                        File.Delete(dir + "cml_xsession.json");
-                        Directory.Delete(dir_exc, true);
-                    }
-                }
-            }
-
-            if (registry_created != null)
-            {
-                DeleteRegistryFolder(RegistryHive.CurrentUser, @"SOFTWARE\Aurora Studios");
-            }
-        }
     }
 }
